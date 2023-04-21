@@ -71,6 +71,8 @@ func CreateExportImage(path string) (*ExportImage, error) {
 		},
 	}
 
+	image.EagleMeta.Tags = createTags(image)
+
 	rawExtras, err := pnginfo.FindValue(pngData, "extras")
 	if err != nil {
 		image.Upscale = false
@@ -85,4 +87,18 @@ func CreateExportImage(path string) (*ExportImage, error) {
 	}
 
 	return image, nil
+}
+
+func createTags(image *ExportImage) []string {
+	var tags []string
+
+	tags = append(tags, fmt.Sprintf("Steps:%d", image.Parameters.Steps))
+	tags = append(tags, fmt.Sprintf("Sampler:%s", image.Parameters.Sampler))
+	tags = append(tags, fmt.Sprintf("CFGScale:%f", image.Parameters.CFGScale))
+	// tags = append(tags, fmt.Sprintf("Seed:%d", image.Parameters.Seed))
+	tags = append(tags, fmt.Sprintf("Size:%s", image.Parameters.Size))
+	tags = append(tags, fmt.Sprintf("ModelHash:%s", image.Parameters.ModelHash))
+	tags = append(tags, fmt.Sprintf("Model:%s", image.Parameters.Model))
+
+	return tags
 }
