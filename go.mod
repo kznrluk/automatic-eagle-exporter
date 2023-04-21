@@ -1,4 +1,4 @@
-module github.com/kznrluk/automatic-eagle-exporter
+module github.com/kznrluk/sdweb-eaglepack
 
 go 1.19
 

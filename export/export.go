@@ -2,9 +2,9 @@ package export
 
 import (
 	"fmt"
-	"github.com/kznrluk/automatic-eagle-exporter/eagle"
-	"github.com/kznrluk/automatic-eagle-exporter/pnginfo"
-	"github.com/kznrluk/automatic-eagle-exporter/utils"
+	"github.com/kznrluk/sdweb-eaglepack/eagle"
+	"github.com/kznrluk/sdweb-eaglepack/pnginfo"
+	"github.com/kznrluk/sdweb-eaglepack/utils"
 	"os"
 	"path/filepath"
 )

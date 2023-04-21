@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/kznrluk/automatic-eagle-exporter/export"
+	"github.com/kznrluk/sdweb-eaglepack/export"
 	"log"
 	"os"
 	"path/filepath"

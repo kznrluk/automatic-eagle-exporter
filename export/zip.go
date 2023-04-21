@@ -4,7 +4,7 @@ import (
 	"archive/zip"
 	"encoding/json"
 	"fmt"
-	"github.com/kznrluk/automatic-eagle-exporter/eagle"
+	"github.com/kznrluk/sdweb-eaglepack/eagle"
 	"io"
 	"io/ioutil"
 	"os"
