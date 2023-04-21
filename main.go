@@ -30,7 +30,7 @@ func main() {
 		loaded = append(loaded, image)
 	}
 
-	log.Printf("Create eaglepack...")
+	log.Printf("Creating eaglepack...")
 	err = export.CreateZip(loaded)
 	if err != nil {
 		panic(err)
