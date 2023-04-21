@@ -48,6 +48,8 @@ func CreateExportImage(path string) (*ExportImage, error) {
 		return nil, fmt.Errorf("error parsing dimensions: %v", err)
 	}
 
+	time := fileInfo.ModTime().Unix() * 1000
+
 	image := &ExportImage{
 		RealName:   realName,
 		Parameters: parameters,
@@ -57,17 +59,17 @@ func CreateExportImage(path string) (*ExportImage, error) {
 			ID:               utils.CreateULID(),
 			Name:             name,
 			Size:             fileInfo.Size(),
-			BTime:            fileInfo.ModTime().Unix(),
-			MTime:            fileInfo.ModTime().Unix(),
+			BTime:            time,
+			MTime:            time,
 			Ext:              "png",
 			Tags:             []string{},
 			Annotation:       rawParams,
-			ModificationTime: fileInfo.ModTime().Unix(),
+			ModificationTime: time,
 			NoThumbnail:      true,
 			Width:            width,
 			Height:           height,
 			Palettes:         []string{},
-			LastModified:     fileInfo.ModTime().Unix(),
+			LastModified:     time,
 		},
 	}
 
@@ -96,8 +98,9 @@ func createTags(image *ExportImage) []string {
 	tags = append(tags, fmt.Sprintf("Sampler:%s", image.Parameters.Sampler))
 	tags = append(tags, fmt.Sprintf("CFGScale:%f", image.Parameters.CFGScale))
 	// tags = append(tags, fmt.Sprintf("Seed:%d", image.Parameters.Seed))
-	tags = append(tags, fmt.Sprintf("Size:%s", image.Parameters.Size))
+	// tags = append(tags, fmt.Sprintf("Size:%s", image.Parameters.Size))
 	tags = append(tags, fmt.Sprintf("ModelHash:%s", image.Parameters.ModelHash))
+	tags = append(tags, fmt.Sprintf("Model:%s", image.Parameters.Model))
 	tags = append(tags, fmt.Sprintf("Model:%s", image.Parameters.Model))
 
 	return tags

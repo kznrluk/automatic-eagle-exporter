@@ -22,22 +22,36 @@ type Parameters struct {
 
 func ParseParameters(input string) (*Parameters, error) {
 	lines := strings.Split(input, "\n")
-	if len(lines) < 1 || len(lines) > 3 {
-		return nil, fmt.Errorf("invalid input: expected 1 to 3 lines, got %d", len(lines))
+	if len(lines) < 1 {
+		return nil, fmt.Errorf("invalid input: expected at least 1 line, got %d", len(lines))
 	}
 	info := &Parameters{}
-	if len(lines) >= 2 {
-		if strings.HasPrefix(lines[1], "Negative prompt: ") {
-			info.NegativePrompt = strings.TrimPrefix(lines[1], "Negative prompt: ")
+	promptLines := []string{}
+	negativePromptLines := []string{}
+	// Separate prompt and negative prompt lines
+	inNegativePrompt := false
+	var stepLine string
+	for _, line := range lines {
+		if strings.HasPrefix(line, "Negative prompt: ") {
+			inNegativePrompt = true
+			negativePromptLines = append(negativePromptLines, strings.TrimPrefix(line, "Negative prompt: "))
+		} else if inNegativePrompt {
+			if strings.Contains(line, "Steps:") {
+				stepLine = line
+				break
+			}
+			negativePromptLines = append(negativePromptLines, line)
 		} else {
-			info.Prompt = lines[0]
+			if strings.Contains(line, "Steps:") {
+				stepLine = line
+				break
+			}
+			promptLines = append(promptLines, line)
 		}
 	}
-	if len(lines) == 3 {
-		info.Prompt = lines[0]
-		info.NegativePrompt = strings.TrimPrefix(lines[1], "Negative prompt: ")
-	}
-	stepLineParts := strings.Split(lines[len(lines)-1], ", ")
+	info.Prompt = strings.Join(promptLines, "\n")
+	info.NegativePrompt = strings.Join(negativePromptLines, "\n")
+	stepLineParts := strings.Split(stepLine, ", ")
 	for _, part := range stepLineParts {
 		kv := strings.Split(part, ": ")
 		if len(kv) != 2 {
@@ -73,7 +87,6 @@ func ParseParameters(input string) (*Parameters, error) {
 			info.Model = value
 		}
 	}
-
 	info.Raw = input
 	return info, nil
 }
