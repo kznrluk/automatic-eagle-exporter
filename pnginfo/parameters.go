@@ -2,6 +2,7 @@ package pnginfo
 
 import (
 	"fmt"
+	"regexp"
 	"strconv"
 	"strings"
 )
@@ -16,6 +17,7 @@ type Parameters struct {
 	Size           string
 	ModelHash      string
 	Model          string
+	LoRAs          []string
 
 	Raw string
 }
@@ -50,6 +52,7 @@ func ParseParameters(input string) (*Parameters, error) {
 		}
 	}
 	info.Prompt = strings.Join(promptLines, "\n")
+	info.LoRAs = extractLoRAs(info.Prompt)
 	info.NegativePrompt = strings.Join(negativePromptLines, "\n")
 	stepLineParts := strings.Split(stepLine, ", ")
 	for _, part := range stepLineParts {
@@ -89,4 +92,14 @@ func ParseParameters(input string) (*Parameters, error) {
 	}
 	info.Raw = input
 	return info, nil
+}
+
+func extractLoRAs(input string) []string {
+	re := regexp.MustCompile(`<([^>]+)>`)
+	matches := re.FindAllStringSubmatch(input, -1)
+	var results []string
+	for _, match := range matches {
+		results = append(results, match[1])
+	}
+	return results
 }

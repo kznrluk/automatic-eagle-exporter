@@ -103,5 +103,9 @@ func createTags(image *ExportImage) []string {
 	tags = append(tags, fmt.Sprintf("Model:%s", image.Parameters.Model))
 	tags = append(tags, fmt.Sprintf("Model:%s", image.Parameters.Model))
 
+	for i, t := range image.Parameters.LoRAs {
+		tags = append(tags, fmt.Sprintf("LoRA%d:%s", i, t))
+	}
+
 	return tags
 }
